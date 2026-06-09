@@ -22,7 +22,7 @@ const PROJECTS: Project[] = [
     tech: ['Next', 'Supabase', 'AI', 'Webhooks'],
     desc: 'Feedback management platform with simple idea: give product teams a single place to collect, organize, and act on user feedback.',
     url: 'https://www.linkedin.com/feed/update/urn:li:activity:7438504954258112512/',
-    image: '/public/projects/feedbackami.png',
+    image: '/projects/feedbackami.png',
   },
   {
     num: '02',
@@ -32,7 +32,7 @@ const PROJECTS: Project[] = [
     tech: ['React', 'Laravel', 'AWS'],
     desc: "Build E-commerce system for toys acccesories include local and international market",
     url: 'https://www.linkedin.com/feed/update/urn:li:activity:7446757173839327232/',
-    image: '/public/projects/legacyvault.jpeg',
+    image: '/projects/legacyvault.jpeg',
   },
   {
     num: '03',
@@ -42,7 +42,7 @@ const PROJECTS: Project[] = [
     tech: ['Wordpress', 'Elementor', 'Webhooks'],
     desc: 'Building company profile',
     url: 'https://wellnessbysolace.com',
-    image: '/public/projects/solace.png',
+    image: '/projects/solace.png',
   },
   {
     num: '04',
@@ -52,7 +52,7 @@ const PROJECTS: Project[] = [
     tech: ['Next', 'Node', 'Express', 'PostgreSQL', 'PM2', 'AI'],
     desc: 'Manage, schedule, and publish content across social media platform.',
     url: '/',
-    image: '/public/projects/gsocial.png',
+    image: '/projects/gsocial.png',
   },
   {
     num: '05',
@@ -62,7 +62,7 @@ const PROJECTS: Project[] = [
     tech: ['React', 'Tailwind', 'AI'],
     desc: 'Scan oral health with AI powered to get healths and insights. Assist with dentist appointment on near locations',
     url: 'https://app.gigee.my/',
-    image: '/public/projects/gigee.png',
+    image: '/projects/gigee.png',
   },
 ]
 
