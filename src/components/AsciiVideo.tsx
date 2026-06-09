@@ -16,12 +16,16 @@ function useCanvasHeight() {
   return height;
 }
 
-export default function AsciiVideo() {
+interface Props { ready?: boolean }
+
+export default function AsciiVideo({ ready = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasHeight = useCanvasHeight();
 
   useEffect(() => {
+    if (!ready) return;
+
     const canvas = canvasRef.current;
     const video = videoRef.current;
     if (!canvas || !video) return;
@@ -86,24 +90,21 @@ export default function AsciiVideo() {
     });
     ro.observe(canvas);
 
-    video.addEventListener('canplay', () => {
-      video.play().catch(() => {});
-    });
-
+    video.play().catch(() => {});
     rafId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(rafId);
       ro.disconnect();
     };
-  }, []);
+  }, [ready]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%' }}>
       <video
         ref={videoRef}
         src="/hero.mp4"
-        autoPlay
+        preload="auto"
         loop
         muted
         playsInline

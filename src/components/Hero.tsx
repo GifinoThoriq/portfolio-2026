@@ -7,7 +7,7 @@ const BIO =
   "I build interfaces that feel precise and alive — from pixel-perfect UIs to scalable backend APIs, without losing sight of the user at every layer."
 
 const STACK = [
-  'React', 'Angualar', 'Vuew' ,'Next.js', 'Node',
+  'React', 'Angular', 'Vue' ,'Next.js', 'Node',
   'Express', 'Laravel', 'Figma', 'PostgreSQL', 'AI'
 ]
 
@@ -75,7 +75,7 @@ export default function Hero({ ready = false }: Props) {
       <div className="hero__main">
 
         <div className="hero__video">
-          <AsciiVideo />
+          <AsciiVideo ready={ready} />
         </div>
 
         <aside className="hero__aside">
