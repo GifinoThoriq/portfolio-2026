@@ -62,7 +62,7 @@ const PROJECTS: Project[] = [
     tech: ['React', 'Tailwind', 'AI'],
     desc: 'Scan oral health with AI powered to get healths and insights. Assist with dentist appointment on near locations',
     url: 'https://app.gigee.my/',
-    image: '/projects/gigee.png',
+    image: '/projects/gigee.webp',
   },
 ]
 
