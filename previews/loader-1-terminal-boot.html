@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Loader 1 — Terminal Boot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: #e8e8e8;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  #loader {
+    width: min(520px, 90vw);
+    padding: 2rem;
+  }
+
+  .line {
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    letter-spacing: 0.08em;
+    line-height: 1.9;
+    opacity: 0;
+    white-space: pre;
+    transition: opacity 0.15s ease;
+  }
+
+  .line.visible { opacity: 1; }
+
+  .ok  { color: #5adb8a; }
+  .dim { color: rgba(255,255,255,0.45); }
+
+  .prompt { color: #5adb8a; }
+
+  #caret {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    background: #5adb8a;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  #loader.fade-out {
+    animation: fadeOut 0.5s ease forwards;
+  }
+
+  @keyframes fadeOut {
+    to { opacity: 0; transform: translateY(-4px); }
+  }
+</style>
+</head>
+<body>
+<div id="loader">
+  <div class="line dim" id="l0">// GIFINO THORIQ — PORTFOLIO v1.0</div>
+  <div class="line" id="l1">INITIALIZING PORTFOLIO<span class="dim">.................</span><span class="ok">OK</span></div>
+  <div class="line" id="l2">LOADING MODULES<span class="dim">......................</span><span class="ok">OK</span></div>
+  <div class="line" id="l3">FETCHING PROJECTS<span class="dim">....................</span><span class="ok">OK</span></div>
+  <div class="line" id="l4">RENDERING COMPONENTS<span class="dim">.................</span><span class="ok">OK</span></div>
+  <div class="line" id="l5">COMPILING STYLES<span class="dim">.....................</span><span class="ok">OK</span></div>
+  <div class="line" id="l6"><span class="prompt">&gt;</span> READY<span id="caret"></span></div>
+</div>
+
+<script>
+  const lines = document.querySelectorAll('.line');
+  const delays = [0, 300, 550, 800, 1050, 1300, 1650];
+
+  function run() {
+    document.getElementById('caret').style.display = 'none';
+    lines.forEach(l => l.classList.remove('visible'));
+
+    delays.forEach((d, i) => {
+      setTimeout(() => {
+        lines[i].classList.add('visible');
+        if (i === lines.length - 1) {
+          document.getElementById('caret').style.display = 'inline-block';
+          // loop: restart after a pause
+          setTimeout(restart, 2200);
+        }
+      }, d);
+    });
+  }
+
+  function restart() {
+    const loader = document.getElementById('loader');
+    loader.classList.add('fade-out');
+    setTimeout(() => {
+      loader.classList.remove('fade-out');
+      loader.style.opacity = '';
+      run();
+    }, 700);
+  }
+
+  run();
+</script>
+</body>
+</html>

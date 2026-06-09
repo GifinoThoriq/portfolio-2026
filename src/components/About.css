@@ -1,0 +1,197 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 2rem;
+  position: relative;
+}
+
+/* ─────────────────────────────────────────────
+   1. LINE DRAW
+   ───────────────────────────────────────────── */
+.about__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0%;
+  background: rgba(255, 255, 255, 0.08);
+  /* no transition until .--draw is added */
+}
+
+.about__line--draw {
+  animation: line-draw 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: var(--line-delay, 0ms);
+}
+
+@keyframes line-draw {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ─────────────────────────────────────────────
+   LABEL
+   ───────────────────────────────────────────── */
+.about__label {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  padding-top: 0.5rem;
+}
+
+/* ─────────────────────────────────────────────
+   CONTENT GRID
+   ───────────────────────────────────────────── */
+.about__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: end;
+  padding-bottom: 2rem;
+}
+
+/* ─────────────────────────────────────────────
+   2. BIO — TYPEWRITER
+   ───────────────────────────────────────────── */
+.about__bio {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.about__text {
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  line-height: 1.8;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+  max-width: 52ch;
+  min-height: 1.8em; /* prevent layout jump on empty lines */
+}
+
+/* blinking caret */
+.about__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--text);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: caret-blink 0.7s step-end infinite;
+}
+
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ─────────────────────────────────────────────
+   STATUS
+   ───────────────────────────────────────────── */
+.about__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+}
+
+.about__status--visible {
+  animation: fade-up 0.5s ease forwards;
+  animation-delay: var(--status-delay, 0ms);
+}
+
+.about__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.about__dot--open {
+  background: #5adb8a;
+  box-shadow: 0 0 6px #5adb8a88;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+.about__dot--busy   { background: #f0c040; }
+.about__dot--closed { background: var(--muted); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ─────────────────────────────────────────────
+   3. STACK — STAGGER FADE-UP
+   ───────────────────────────────────────────── */
+.about__stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about__stack-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.about__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about__tag {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.35rem 0.7rem;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.about__tag--visible {
+  animation: fade-up 0.4s ease forwards;
+  animation-delay: var(--tag-delay, 0ms);
+}
+
+.about__tag:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─────────────────────────────────────────────
+   SHARED KEYFRAME
+   ───────────────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .about__content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Loader 6 — Scanline Wipe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@900&family=Space+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    color: #e8e8e8;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* Mock "site content" underneath */
+  #site-mock {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 4rem;
+    gap: 0.5rem;
+    opacity: 0;
+  }
+
+  .mock-title {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    letter-spacing: -0.01em;
+    color: #e8e8e8;
+    line-height: 1;
+  }
+
+  .mock-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  /* Overlay that covers site content initially */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    transform-origin: top center;
+  }
+
+  /* The scanning green line */
+  #scanline {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #5adb8a;
+    box-shadow: 0 0 10px 2px #5adb8a88, 0 0 30px 6px #5adb8a22;
+    top: 0;
+    will-change: top;
+  }
+
+  /* Trail left behind the scanline */
+  #trail {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    top: 0;
+    height: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(90,219,138,0.04) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Mock site content revealed after wipe -->
+<div id="site-mock">
+  <div class="mock-title">GIFINO<br/>THORIQ</div>
+  <div class="mock-sub">/ All-rounder developer</div>
+</div>
+
+<!-- Black overlay (slides up as line passes) -->
+<div id="overlay"></div>
+
+<!-- The scanline -->
+<div id="scanline"></div>
+<div id="trail"></div>
+
+<script>
+  const scanline = document.getElementById('scanline');
+  const trail    = document.getElementById('trail');
+  const overlay  = document.getElementById('overlay');
+  const siteMock = document.getElementById('site-mock');
+
+  const SWEEP_DURATION = 900;   // ms line travels top→bottom
+  const HOLD_AFTER     = 800;   // ms to hold revealed site
+  const HOLD_BEFORE    = 300;   // ms pause before sweep starts
+
+  function easeInOut(t) { return t < .5 ? 2*t*t : -1+(4-2*t)*t; }
+
+  let startTime = null;
+  let phase = 'before'; // before | sweeping | holding | resetting
+
+  function reset() {
+    phase = 'before';
+    scanline.style.top = '0px';
+    trail.style.height = '0px';
+    overlay.style.transform = 'scaleY(1)';
+    overlay.style.transformOrigin = 'top center';
+    siteMock.style.opacity = '0';
+    siteMock.style.transform = 'translateY(0px)';
+    startTime = null;
+    requestAnimationFrame(tick);
+  }
+
+  function tick(ts) {
+    if (startTime === null) startTime = ts;
+    const elapsed = ts - startTime;
+
+    if (phase === 'before') {
+      if (elapsed >= HOLD_BEFORE) {
+        phase = 'sweeping';
+        startTime = ts;
+      }
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    if (phase === 'sweeping') {
+      const t = Math.min(elapsed / SWEEP_DURATION, 1);
+      const eased = easeInOut(t);
+      const y = eased * window.innerHeight;
+
+      scanline.style.top = y + 'px';
+      trail.style.height = y + 'px';
+
+      // overlay clips from top: as line descends, overlay shrinks from top
+      overlay.style.transformOrigin = 'top center';
+      overlay.style.transform = `translateY(${y}px) scaleY(${1 - eased})`;
+
+      // site mock slides up slightly as it's revealed
+      const revealShift = (1 - eased) * 16;
+      siteMock.style.opacity = String(eased);
+      siteMock.style.transform = `translateY(${revealShift}px)`;
+
+      if (t >= 1) {
+        phase = 'holding';
+        startTime = ts;
+        overlay.style.display = 'none';
+        scanline.style.top = window.innerHeight + 'px';
+        scanline.style.opacity = '0';
+      }
+
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    if (phase === 'holding') {
+      if (elapsed >= HOLD_AFTER) {
+        phase = 'resetting';
+        overlay.style.display = '';
+        scanline.style.opacity = '1';
+        setTimeout(reset, 50);
+      } else {
+        requestAnimationFrame(tick);
+      }
+    }
+  }
+
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>
