@@ -7,8 +7,8 @@ const BIO =
   "I build interfaces that feel precise and alive — from pixel-perfect UIs to scalable backend APIs, without losing sight of the user at every layer."
 
 const STACK = [
-  'React', 'Angular', 'Vue' ,'Next.js', 'Node',
-  'Express', 'Laravel', 'Figma', 'PostgreSQL', 'AI'
+  'Typescript', 'React', 'Angular', 'Vue' ,'Next.js', 'Node', 'Ionic',
+  'Express', 'Laravel', 'PostgreSQL', 'AI'
 ]
 
 // ── DecryptedText settings ─────────────────────────────────
@@ -36,17 +36,17 @@ interface Props {
 }
 
 export default function Hero({ ready = false }: Props) {
-  const [time, setTime]           = useState(new Date())
+  // const [time, setTime]           = useState(new Date())
   const [labelsVisible, setLabels] = useState(false)
   const [bioTrigger, setBio]      = useState(false)
   const [tagsVisible, setTags]    = useState(false)
   const [availVisible, setAvail]  = useState(false)
 
   // Clock
-  useEffect(() => {
-    const id = setInterval(() => setTime(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
+  // useEffect(() => {
+  //   const id = setInterval(() => setTime(new Date()), 1000)
+  //   return () => clearInterval(id)
+  // }, [])
 
   // Animation chain — starts only after loader signals ready
   useEffect(() => {
@@ -60,10 +60,10 @@ export default function Hero({ ready = false }: Props) {
     return () => timers.forEach(clearTimeout)
   }, [ready])
 
-  const h    = ((time.getHours() % 12) || 12).toString().padStart(2, '0')
-  const m    = time.getMinutes().toString().padStart(2, '0')
-  const isAm = time.getHours() < 12
-  const tz   = Intl.DateTimeFormat().resolvedOptions().timeZone.split('/').pop()!.replace(/_/g, ' ')
+  // const h    = ((time.getHours() % 12) || 12).toString().padStart(2, '0')
+  // const m    = time.getMinutes().toString().padStart(2, '0')
+  // const isAm = time.getHours() < 12
+  // const tz   = Intl.DateTimeFormat().resolvedOptions().timeZone.split('/').pop()!.replace(/_/g, ' ')
 
   return (
     <section className="hero" id="hero">
@@ -108,33 +108,12 @@ export default function Hero({ ready = false }: Props) {
             <span className="hero__dot" />
             AVAILABLE — REMOTE
           </div>
-
-          {/* Phase 1b — stack (label same time as role label) */}
-          <div className="hero__stack">
-            <div className={`hero__stack-label${labelsVisible ? ' hero__stack-label--visible' : ''}`}>
-              / STACK
-            </div>
-
-            {/* Phase 2b — tags stagger in (offset from bio) */}
-            <div className="hero__tags">
-              {STACK.map((t, i) => (
-                <span
-                  key={t}
-                  className={`hero__tag${tagsVisible ? ' hero__tag--visible' : ''}`}
-                  style={{ '--tag-delay': `${i * TAG_STAGGER}ms` } as React.CSSProperties}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-
         </aside>
       </div>
 
       {/* ── Bottom bar ── */}
       <div className="hero__bottom">
-        <div className="hero__info">
+        {/* <div className="hero__info">
           <span className="hero__tz">LOCAL TIME — {tz}</span>
           <div className="hero__time-row">
             <span className="hero__time">{h}<span className="hero__colon">:</span>{m}</span>
@@ -151,11 +130,32 @@ export default function Hero({ ready = false }: Props) {
             <span>INDONESIA &rarr; REMOTE</span>
             <span>ALL ROUNDER DEVELOPER</span>
           </div>
+        </div> */}
+
+        {/* Phase 1b — stack (label same time as role label) */}
+        <div className="hero__stack">
+          <div className={`hero__stack-label${labelsVisible ? ' hero__stack-label--visible' : ''}`}>
+            / STACK
+          </div>
+
+          {/* Phase 2b — tags stagger in (offset from bio) */}
+          <div className="hero__tags">
+            {STACK.map((t, i) => (
+              <span
+                key={t}
+                className={`hero__tag ${tagsVisible ? ' hero__tag--visible' : ''}`}
+                style={{ '--tag-delay': `${i * TAG_STAGGER}ms` } as React.CSSProperties}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
 
         <nav className="hero__nav" aria-label="Social links">
           <a href="https://github.com/GifinoThoriq" target="_blank" rel="noopener noreferrer">Github</a>
           <a href="https://www.linkedin.com/in/gifino-thoriq/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="mailto:gifino92@gmail.com">Resume</a>
           <a href="mailto:gifino92@gmail.com">Email</a>
         </nav>
       </div>
