@@ -6,6 +6,7 @@ export default function Contact() {
   const year = new Date().getFullYear()
 
   return (
+    <>
     <section className="contact" id="contact">
       <PixelBlast
         variant="diamond"
@@ -59,20 +60,21 @@ export default function Contact() {
           gifino92@gmail.com
         </a>
       </div>
-
-      <div className="contact__footer">
-        <div className="contact__copy">
-          <div>GIFINO THORIQ</div>
-          <div>© {year} — ALL RIGHTS RESERVED</div>
-          <div>INDONESIA → REMOTE</div>
-        </div>
-
-        <nav className="contact__links" aria-label="Social links">
-          <a href="https://github.com/GifinoThoriq" target="_blank" rel="noopener noreferrer">Github</a>
-          <a href="https://www.linkedin.com/in/gifino-thoriq/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-          <a href="mailto:gifino92@gmail.com">Email</a>
-        </nav>
-      </div>
     </section>
+
+    <div className="contact__footer">
+      <div className="contact__copy">
+        <div>GIFINO THORIQ</div>
+        <div>© {year} — ALL RIGHTS RESERVED</div>
+        <div>INDONESIA → REMOTE</div>
+      </div>
+
+      <nav className="contact__links" aria-label="Social links">
+        <a href="https://github.com/GifinoThoriq" target="_blank" rel="noopener noreferrer">Github</a>
+        <a href="https://www.linkedin.com/in/gifino-thoriq/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:gifino92@gmail.com">Email</a>
+      </nav>
+    </div>
+    </>
   )
 }
