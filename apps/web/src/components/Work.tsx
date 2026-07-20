@@ -1,72 +1,11 @@
 import { useState, useRef } from 'react'
+import { Link } from 'react-router'
 import './Work.css'
 import Shuffle from './Shuffle'
-
-interface Project {
-  num: string
-  title: string
-  year: string
-  role: string
-  tech: string[]
-  desc: string
-  url: string
-  image: string
-}
-
-const PROJECTS: Project[] = [
-  {
-    num: '01',
-    title: 'Feedbackami',
-    year: '2026',
-    role: 'Fullstack',
-    tech: ['Next', 'Supabase', 'AI', 'Webhooks'],
-    desc: 'Feedback management platform with simple idea: give product teams a single place to collect, organize, and act on user feedback.',
-    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7438504954258112512/',
-    image: '/projects/feedbackami.png',
-  },
-  {
-    num: '02',
-    title: 'Legacy Vault',
-    year: '2026',
-    role: 'Fullstack',
-    tech: ['React', 'Laravel', 'AWS'],
-    desc: "Build E-commerce system for toys acccesories include local and international market",
-    url: 'https://www.linkedin.com/feed/update/urn:li:activity:7446757173839327232/',
-    image: '/projects/legacyvault.jpeg',
-  },
-  {
-    num: '03',
-    title: 'Wellness by Solace',
-    year: '2026',
-    role: 'Frontend',
-    tech: ['Wordpress', 'Elementor', 'Webhooks'],
-    desc: 'Building company profile',
-    url: 'https://wellnessbysolace.com',
-    image: '/projects/solace.png',
-  },
-  {
-    num: '04',
-    title: 'GSocial',
-    year: '2026',
-    role: 'Fullstack',
-    tech: ['Next', 'Node', 'Express', 'PostgreSQL', 'PM2', 'AI'],
-    desc: 'Manage, schedule, and publish content across social media platform.',
-    url: '/',
-    image: '/projects/gsocial.png',
-  },
-  {
-    num: '05',
-    title: 'Gigee App',
-    year: '2025',
-    role: 'Frontend',
-    tech: ['React', 'Tailwind', 'AI'],
-    desc: 'Scan oral health with AI powered to get healths and insights. Assist with dentist appointment on near locations',
-    url: 'https://app.gigee.my/',
-    image: '/projects/gigee.webp',
-  },
-]
+import { useProjects } from '../lib/queries'
 
 export default function Work() {
+  const { data: projects, isLoading, isError } = useProjects()
   const [activeIdx, setActiveIdx] = useState<number>(0)
   const [isPanelVisible, setPanelVisible] = useState(true)
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -105,20 +44,23 @@ export default function Work() {
 
         {/* ── Left: project list ── */}
         <div className="work__list">
-          {PROJECTS.map((p, i) => {
+          {isLoading && <p className="work__status">Loading projects…</p>}
+          {isError && <p className="work__status">Couldn't load projects.</p>}
+          {projects?.map((p, i) => {
             const isActive = activeIdx === i && isPanelVisible
+            const num = String(i + 1).padStart(2, '0')
             return (
               <div
-                key={p.num}
+                key={p._id}
                 className={`work__item${isActive ? ' work__item--active' : ''}`}
                 onMouseEnter={() => handleEnter(i)}
               >
                 {/* Always visible: num + title + meta */}
                 <div className="work__item-top">
                   <div className="work__item-main">
-                    <span className="work__num">{p.num}</span>
+                    <span className="work__num">{num}</span>
                     <div className="work__info">
-                      <span className="work__title">{p.title}</span>
+                      <Link to={`/work/${p.slug}`} className="work__title">{p.title}</Link>
                       <div className="work__meta">
                         <span>{p.year}</span>
                         <span className="work__meta-sep">/</span>
@@ -130,7 +72,7 @@ export default function Work() {
                   {/* Tags + arrow — slide in from right on hover */}
                   <div className="work__item-aside">
                     <div className="work__tags">
-                      {p.tech.map(t => (
+                      {p.tech?.map(t => (
                         <span key={t} className="work__tag">{t}</span>
                       ))}
                     </div>
@@ -150,7 +92,7 @@ export default function Work() {
                 {/* Description — accordion expand on hover */}
                 <div className="work__expand">
                   <div className="work__expand-inner">
-                    <p className="work__desc">{p.desc}</p>
+                    <p className="work__desc">{p.description}</p>
                   </div>
                 </div>
               </div>
@@ -160,9 +102,9 @@ export default function Work() {
 
         {/* ── Right: image panel ── */}
         <div className="work__panel" aria-hidden="true">
-          {PROJECTS.map((p, i) => (
+          {projects?.map((p, i) => (
             <div
-              key={p.num}
+              key={p._id}
               className={`work__panel-img${activeIdx === i && isPanelVisible ? ' work__panel-img--visible' : ''}`}
             >
               <img src={p.image} alt="" />
