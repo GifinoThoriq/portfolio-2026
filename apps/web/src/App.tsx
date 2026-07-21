@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Hero from './components/Hero'
 import Work from './components/Work'
+import Blog from './components/Blog'
 import Contact from './components/Contact'
 import Loader from './components/Loader'
 import './App.css'
@@ -8,7 +9,8 @@ import './App.css'
 const SECTIONS = [
   { id: 'hero',    label: '01' },
   { id: 'work',    label: '02' },
-  { id: 'contact', label: '03' },
+  { id: 'blog',    label: '03' },
+  { id: 'contact', label: '04' },
 ]
 
 export default function App() {
@@ -57,6 +59,7 @@ export default function App() {
 
       <Hero ready={loaded} />
       <Work />
+      <Blog />
       <Contact />
     </>
   )
